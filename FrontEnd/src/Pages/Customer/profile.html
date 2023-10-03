@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/form.css" />
+
+    <title>Road Rescue</title>
+  </head>
+
+  <body onload="profile()">
+    <div class="navbar">
+      <div class="menu" onclick="toggleMenu()">
+        <img src="./images/menu.svg" alt="logo" />
+      </div>
+
+      <div id="menu" class="sidebar hide">
+        <div class="bar">
+          <div class="menuBar">
+            <button onclick="toggleMenu()">Close Menu</button>
+            <div class="menuItem" onclick="serviceForm()">
+              <img src="./images/send.svg" />
+              <h4>Request Service</h4>
+            </div>
+            <hr />
+            <a class="menuItem" href="activities.html">
+              <img src="./images/activities.svg" />
+
+              <h4>Activities</h4>
+            </a>
+            <hr />
+
+            <a class="menuItem" href="index.html">
+              <img src="./images/home.svg" />
+              <h4>Home</h4>
+            </a>
+            <hr />
+
+            <a class="menuItem" href="help.html">
+              <img src="./images/question.svg" />
+              <h4>Help</h4>
+            </a>
+            <hr />
+
+            <a class="menuItem" href="helpRequest.html">
+              <img src="./images/question.svg" />
+              <h4>Help Request</h4>
+            </a>
+            <hr />
+
+            <a class="menuItem" href="message.html">
+              <img src="./images/messages.svg" />
+              <h4>Messages</h4>
+            </a>
+            <hr />
+
+            <a class="menuItem" href="notification.html">
+              <img src="./images/notifications.svg" />
+              <h4>Notifications</h4>
+            </a>
+            <hr />
+          </div>
+        </div>
+      </div>
+
+      <div class="logo">
+        <img src="./images/logo.png" alt="logo" />
+      </div>
+
+      <div class="navActions">
+        <button class="requestBtn" onclick="serviceForm()">
+          <img src="./images/send.svg" />Request Service
+        </button>
+        <a class="activityButton" href="activities.html"
+          ><img src="./images/activities.svg" />Activities</a
+        >
+        <a href="index.html"><img src="images/home.svg" class="icons" /></a>
+        <div class="helpIcon">
+          <img
+            src="images/question.svg"
+            class="icons"
+            onclick="toggleNotificationMenu()"
+          />
+          <div id="helpMenu" class="helpMenu hide">
+            <a href="help.html">Help</a>
+            <hr />
+            <a href="helpRequest.html">Help Request</a>
+            <hr />
+          </div>
+        </div>
+        <a href="message.html">
+          <img class="messageAlert icons" src="images/messages.svg" />
+        </a>
+        <a href="notification.html">
+          <img class="notificationAlert icons" src="images/notifications.svg" />
+        </a>
+        <div class="profileIcon">
+          <img src="images/profile.svg" onclick="toggleProfileMenu()" />
+          <div id="profileMenu" class="profileMenu hide">
+            <a href="profile.html">Profile</a>
+            <hr />
+            <a href="vehicles.html">Vehicles</a>
+            <hr />
+
+            <a href="settings.html">Settings</a>
+            <hr />
+
+            <a href="javascript:logout()">Log Out</a>
+            <hr />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="profileMain">
+      <div style="width: 50%">
+        <div id="profileContainer"></div>
+
+        <template id="profileTemplate">
+          <div id="Profile" class="profileSection">
+            <div class="profileImg">
+              <img src="images/pic.png" />
+            </div>
+
+            <table>
+              <tr>
+                <td>First Name:</td>
+                <td>Nirmal</td>
+              </tr>
+              <tr>
+                <td>Last Name:</td>
+                <td>Hettiarachchi</td>
+              </tr>
+              <tr>
+                <td>Phone Number:</td>
+                <td>
+                  +94 768879830
+                  <img style="float: right" src="images/check.svg" />
+                </td>
+              </tr>
+              <tr>
+                <td>Email:</td>
+                <td>nirmalhettiarachchi@gmail.com</td>
+              </tr>
+            </table>
+
+            <div class="editButton">
+              <button onclick="editProfile()">
+                <img src="images/edit2.svg" style="margin-right: 10px" />Edit
+                Profile
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <template id="editProfileTemplate">
+          <div id="editProfile" class="profileSection">
+            <div class="profileImg">
+              <img src="images/pic.png" />
+            </div>
+
+            <form onsubmit="profileSubmit(event, this)">
+              <table>
+                <tr>
+                  <td>First Name:</td>
+                  <td id="firstName">Nirmal</td>
+
+                  <template id="firstNameTemplate">
+                    <td id="firstName">
+                      <input name="fName" value="Nirmal" />
+                    </td>
+                  </template>
+
+                  <td style="border: none; padding: 0 0 0 5px">
+                    <img
+                      onclick="editFirstName()"
+                      src="images/edit2.svg"
+                      style="cursor: pointer"
+                    />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Last Name:</td>
+                  <td id="lastName">Hettiarachchi</td>
+
+                  <template id="lastNameTemplate">
+                    <td id="lastName">
+                      <input name="lName" value="Hettiarachchi" />
+                    </td>
+                  </template>
+
+                  <td style="border: none; padding: 0 0 0 5px">
+                    <img
+                      onclick="editLastName()"
+                      src="images/edit2.svg"
+                      style="cursor: pointer"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Phone Number:</td>
+                  <td>
+                    +94 768879830
+                    <img style="float: right" src="images/check.svg" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Email:</td>
+                  <td id="email">nirmalhettiarachchi@gmail.com</td>
+
+                  <template id="emailTemplate">
+                    <td id="email">
+                      <input
+                        name="lName"
+                        value="nirmalhettiarachchi@gmail.com"
+                      />
+                    </td>
+                  </template>
+
+                  <td style="border: none; padding: 0 0 0 5px">
+                    <img
+                      onclick="editEmail()"
+                      src="images/edit2.svg"
+                      style="cursor: pointer"
+                    />
+                  </td>
+                </tr>
+              </table>
+
+              <div class="editButton" style="width: 100%">
+                <button type="button" onclick="profile()">
+                  <img
+                    src="images/cancel.svg"
+                    style="margin-right: 10px"
+                  />Cancel
+                </button>
+                <button type="submit" style="margin-right: 20px">
+                  <img src="images/save.svg" style="margin-right: 10px" />Save
+                  Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </template>
+      </div>
+    </main>
+
+    <footer>
+      <div class="social">
+        <h4>CONTACT US</h4>
+        <div class="socialIcons">
+          <a href="#facebook"><img src="images/facebook.svg" /></a>
+          <a href="#linkedin"><img src="images/linkedin.svg" /></a>
+          <a href="#github"><img src="images/github.svg" /></a>
+          <a href="#whatsapp"><img src="images/whatsapp.svg" /></a>
+        </div>
+      </div>
+      <div class="fSection">
+        <img src="images/logo.png" />
+        <h4>DEVELOPED AND MAINTAINED BY A TEAM OF UNDERGRADUTES AT UCSC</h4>
+      </div>
+    </footer>
+  </body>
+
+  <script src="js/main.js"></script>
+</html>

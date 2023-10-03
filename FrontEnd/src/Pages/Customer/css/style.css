@@ -1,0 +1,354 @@
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  color: white;
+  height: 100%;
+  position: relative;
+}
+
+:root {
+  --h1: clamp(14px, 2vw, 35px);
+  --h2: clamp(13px, 1.7vw, 30px);
+  --h3: clamp(12px, 1.4vw, 25px);
+  --h4: clamp(11px, 0.9vw, 25px);
+  --h5: clamp(10px, 0.8vw, 25px);
+  --h6: clamp(9px, 0.5vw, 25px);
+
+  --m1: clamp(20px, 50%, 30px);
+  --m2: clamp();
+  --m3: clamp();
+  --m4: clamp();
+  --m5: clamp();
+  --m6: clamp();
+}
+
+.darkBackground {
+  background-color: #000000;
+  opacity: 0.5;
+}
+
+/* ----------------- Navbar -------------------- */
+
+.navbar {
+  width: 94%;
+  background: #253555;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(0px, 1vw, 25px) 3%;
+}
+
+.hide {
+  display: none;
+}
+
+.sidebar {
+  top: 0;
+  left: 0;
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+}
+
+.bar {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.sidebarBg {
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-color: #000000;
+  opacity: 0.5;
+  width: 100%;
+  height: 100%;
+}
+
+.menuBar {
+  width: 75%;
+  height: 100%;
+  background-color: #000000;
+  padding: 20px 20px;
+}
+
+.menuBar > button {
+  font-weight: 700;
+  cursor: pointer;
+
+  font-size: var(--h4);
+
+  background-color: white;
+  color: black;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 20px;
+}
+
+.menuBar > button:hover {
+  background-color: #c1c1c1;
+}
+
+.menuBar > hr {
+  border: none;
+  border-top: 1px solid white;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+.menuItem > h4 {
+  margin: 0;
+  font-size: var(--h4);
+}
+
+.menuItem > img {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+}
+
+.logo {
+  width: 8%;
+}
+
+.logo > img {
+  vertical-align: middle;
+  width: 100%;
+}
+
+.navActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navActions > button,
+.activityButton {
+  color: white;
+  text-decoration: none;
+
+  font-weight: 700;
+  font-size: var(--h4);
+
+  cursor: pointer;
+  background: #23a6f0;
+  border-radius: 10px;
+  border: none;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* width: 180px; */
+  padding: 5px 10px;
+  margin: 0 10px 0 10px;
+}
+
+.navActions > button:hover,
+.activityButton:hover {
+  background: #0088d7;
+  filter: drop-shadow(0 0 20px #001039);
+}
+
+.navActions > button > img,
+.activityButton > img {
+  width: clamp(20px, 2vw, 34px);
+  height: clamp(20px, 2vw, 34px);
+  margin-right: 20px;
+}
+
+.icons {
+  width: clamp(20px, 2.5vw, 40px);
+  margin: 0 0.5vw;
+
+  cursor: pointer;
+}
+
+.icons:hover {
+  filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg)
+    drop-shadow(0 0 20px #000000);
+}
+
+.profileIcon {
+  margin-left: 10px;
+  width: clamp(10px, 2.5vw, 40px);
+  position: relative;
+}
+
+.profileIcon > img {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.profileIcon > img:hover {
+  filter: invert(1) drop-shadow(0 0 20px #000000);
+}
+
+.helpIcon {
+  position: relative;
+}
+
+.profileMenu {
+  width: 120px;
+  position: absolute;
+  text-align: center;
+  top: 55px;
+  right: -50%;
+  background-color: #757a90;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+.profileMenu > a,
+.helpMenu > a {
+  margin: 0 20px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: var(--h4);
+}
+
+.helpMenu {
+  width: 150px;
+
+  position: absolute;
+  text-align: center;
+  top: 55px;
+  right: -60px;
+  background-color: #757a90;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+.disableEvent{
+  pointer-events: none;
+}
+
+/* ------------------ footer ------------------- */
+
+footer {
+  width: 100%;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 30px 0 30px 0;
+}
+
+.social h4 {
+  margin: 0 0 10px 0;
+  font-size: var(--h4);
+}
+
+.socialIcons > a {
+  margin: 0 0.2vw;
+}
+
+.socialIcons > a > img {
+  width: clamp(10px, 2vw, 34px);
+}
+
+.fSection {
+  width: 75%;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  border-left: 1px solid;
+  padding: 30px 0 30px 0;
+}
+
+.fSection > img {
+  width: 15%;
+}
+
+.fSection > h4 {
+  margin: 0;
+  font-size: var(--h4);
+}
+
+/* ------------ Break Points --------------- */
+
+@media (min-width: 1001px) {
+  .menu {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .navActions > button,
+  .navActions > a,
+  .icons {
+    display: none;
+  }
+
+  .menu {
+    cursor: pointer;
+    width: 3%;
+  }
+
+  .menu > img {
+    width: 100%;
+  }
+
+  .logo {
+    width: 8%;
+  }
+
+  .profileMenu {
+    top: 25px;
+    right: -30%;
+    padding: 10px 20px;
+  }
+
+  .profileMenu > h4,
+  .helpMenu > h4 {
+    margin: 0 20px;
+    cursor: pointer;
+  }
+
+  /* ----------------------------- */
+
+  footer {
+    flex-direction: column;
+  }
+
+  .social {
+    width: 85%;
+    align-items: flex-start;
+  }
+
+  .fSection {
+    width: 90%;
+    padding-bottom: 10px;
+    text-align: center;
+    border-left: none;
+    border-top: 1px solid white;
+  }
+
+  .fSection > img {
+    display: none;
+  }
+}

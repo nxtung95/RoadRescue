@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+
+  <title>Road Rescue</title>
+</head>
+
+<body onload="loadGarage()">
+  <div class="navbar">
+    <div class="menu" onclick="toggleMenu()">
+      <img src="./images/menu.svg" alt="logo" />
+    </div>
+
+    <div id="menu" class="sidebar hide">
+      <div class="bar">
+        <div class="menuBar">
+          <button onclick="toggleMenu()">Close Menu</button>
+          <div class="menuItem" onclick="serviceForm()">
+            <img src="./images/send.svg" />
+            <h4>Request Service</h4>
+          </div>
+          <hr />
+          <a class="menuItem" href="activities.html">
+            <img src="./images/activities.svg" />
+
+            <h4>Activities</h4>
+          </a>
+          <hr />
+
+          <a class="menuItem" href="index.html">
+            <img src="./images/home.svg" />
+            <h4>Home</h4>
+          </a>
+          <hr />
+
+          <a class="menuItem" href="help.html">
+            <img src="./images/question.svg" />
+            <h4>Help</h4>
+          </a>
+          <hr />
+
+          <a class="menuItem" href="helpRequest.html">
+            <img src="./images/question.svg" />
+            <h4>Help Request</h4>
+          </a>
+          <hr />
+
+          <a class="menuItem" href="message.html">
+            <img src="./images/messages.svg" />
+            <h4>Messages</h4>
+          </a>
+          <hr />
+
+          <a class="menuItem" href="notification.html">
+            <img src="./images/notifications.svg" />
+            <h4>Notifications</h4>
+          </a>
+          <hr />
+        </div>
+      </div>
+    </div>
+
+    <div class="logo">
+      <img src="./images/logo.png" alt="logo" />
+    </div>
+
+    <div class="navActions">
+      <button class="requestBtn" onclick="serviceForm()">
+        <img src="./images/send.svg" />Request Service
+      </button>
+      <a class="activityButton" href="activities.html"><img src="./images/activities.svg" />Activities</a>
+      <a href="index.html"><img src="images/home.svg" class="icons" /></a>
+
+      <div class="helpIcon">
+        <img src="images/question.svg" class="icons" onclick="toggleNotificationMenu()" />
+        <div id="helpMenu" class="helpMenu hide">
+          <a href="help.html">Help</a>
+          <hr />
+          <a href="helpRequest.html">Help Request</a>
+          <hr />
+        </div>
+      </div>
+
+      <a href="message.html">
+        <img class="messageAlert icons" src="images/messages.svg" />
+      </a>
+
+      <a href="notification.html">
+        <img class="notificationAlert icons" src="images/notifications.svg" />
+      </a>
+
+      <div class="profileIcon">
+        <img src="images/profile.svg" onclick="toggleProfileMenu()" />
+        <div id="profileMenu" class="profileMenu hide">
+          <a href="profile.html">Profile</a>
+          <hr />
+          <a href="vehicles.html">Vehicles</a>
+          <hr />
+
+          <a href="settings.html">Settings</a>
+          <hr />
+
+          <a href="javascript:logout()">Log Out</a>
+          <hr />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <h2>Welcome, Nirmal Hettiarachchi</h2>
+    <div class="sectionRow">
+      <div class="col-1">
+        <button onclick="serviceForm()" class="requestBtn">
+          <img src="./images/send.svg" />Request Service
+        </button>
+
+        <div id="garageContainer"></div>
+
+        <template id="garageListTemplate">
+          <div id="garageList" class="garageSection">
+            <div class="listHeader">
+              <h3>Nearby Garages</h3>
+              <button onclick="checkAll()">
+                <img src="./images/select.svg" />Select All
+              </button>
+            </div>
+
+            <div class="garage">
+              <h4>Upali Garage (Pvt) Ltd</h4>
+              <div class="garageIcons">
+                <img src="images/check.svg" class="checkCross" onclick="toogleCheck(this)" />
+                <img src="images/info.svg" onclick="checkInfo()" />
+              </div>
+            </div>
+
+            <div class="garage">
+              <h4>Upali Garage (Pvt) Ltd</h4>
+              <div class="garageIcons">
+                <img src="images/cross.svg" class="checkCross" onclick="toogleCheck(this)" />
+                <img src="images/info.svg" />
+              </div>
+            </div>
+
+            <div class="garage">
+              <h4>Upali Garage (Pvt) Ltd</h4>
+              <div class="garageIcons">
+                <img src="images/check.svg" class="checkCross" onclick="toogleCheck(this)" />
+                <img src="images/info.svg" />
+              </div>
+            </div>
+
+            <div class="garage">
+              <h4>Upali Garage (Pvt) Ltd</h4>
+              <div class="garageIcons">
+                <img src="images/cross.svg" class="checkCross" onclick="toogleCheck(this)" />
+                <img src="images/info.svg" />
+              </div>
+            </div>
+
+            <div class="garage">
+              <h4>Upali Garage (Pvt) Ltd</h4>
+              <div class="garageIcons">
+                <img src="images/cross.svg" class="checkCross" onclick="toogleCheck(this)" />
+                <img src="images/info.svg" />
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <template id="garageInfoTemplate">
+          <div id="garageInfo" class="garageSection">
+            <div class="listHeader">
+              <h3>Nearby Garages</h3>
+              <button onclick="backInfo()">
+                <img src="./images/return.svg" style="margin: 0" />
+              </button>
+            </div>
+
+            <div class="garageInfo">
+              <div class="header">
+                <h4>Upali Garage (Pvt) Ltd</h4>
+              </div>
+              <div class="details">
+                <div style="display: flex">
+                  <img src="./images/Star.svg" style="margin-right: 5px" />
+                  <h4>4.8</h4>
+                </div>
+                <h4>Services Areas</h4>
+                <ul>
+                  <li>Oil and Filter Change</li>
+                  <li>Engine Repair</li>
+                  <li>Brake System Repair</li>
+                  <li>Tire Replacement</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <template id="serviceFormTemplate">
+          <div id="garageForm" class="garageSection">
+            <form onsubmit="requestService(event, this)">
+              <select id="vehicle" name="vehicle" required>
+                <option selected disabled hidden>Select your Vehicle</option>
+              </select>
+
+              <textarea id="description" name="description" placeholder="Write a Description ..." type="" required
+                rows="4"></textarea>
+
+              <select id="category" name="category" required>
+                <option selected disabled hidden>Select the Category</option>
+              </select>
+
+              <div style="display: flex;">
+
+                <button type="button" onclick="loadGarage()" style="margin-right: 10px;">Cancel</button>
+
+                <button type="submit">Continue</button>
+              </div>
+            </form>
+          </div>
+        </template>
+
+        <template id="requestTemplate">
+          <div id="garageRequest" class="garageSection">
+            <form>
+              <h2>Requesting Assistance ...</h2>
+              <button type="submit">
+                <img src="images/cross.svg" style="margin-right: 10px" />Cancel
+              </button>
+            </form>
+          </div>
+        </template>
+
+        <template id="requestAcceptedTemplate">
+          <div id="garageAccepted" class="garageSection">
+            <div class="listHeader" style="flex-direction: column; text-align: center">
+              <h2>Request Accepted</h2>
+              <h2>ETA: 15 Minutes</h2>
+            </div>
+
+            <div class="garageInfo">
+              <div class="header">
+                <h4>Upali Garage (Pvt) Ltd</h4>
+                <div style="margin-right: 15px">
+                  <img src="images/contact.svg" style="width: 35px; height: 35px" />
+                  <img src="images/messages.svg" onclick="navigateMessage()" />
+                </div>
+              </div>
+              <div class="details">
+                <div style="display: flex">
+                  <img src="./images/Star.svg" style="margin-right: 5px" />
+                  <h4>4.8</h4>
+                </div>
+                <h4>Services Areas</h4>
+                <ul>
+                  <li>Oil and Filter Change</li>
+                  <li>Engine Repair</li>
+                  <li>Brake System Repair</li>
+                  <li>Tire Replacement</li>
+                </ul>
+              </div>
+            </div>
+
+            <form>
+              <button type="submit">
+                <img src="images/cross.svg" style="margin-right: 10px" />Cancel
+              </button>
+            </form>
+          </div>
+        </template>
+
+        <template id="requestFailedTemplate">
+          <div id="garageFailed" class="garageSection" style="justify-content: center">
+            <div class="listHeader">
+              <button style="visibility: hidden">
+                <img src="./images/return.svg" style="margin: 0" />
+              </button>
+              <h2>Try Again</h2>
+              <button onclick="reset()">
+                <img src="./images/return.svg" style="margin: 0" />
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <template id="providingServicesTemplate">
+          <div id="providingServices" class="garageSection">
+            <div class="listHeader" style="flex-direction: column; text-align: center">
+              <h2>Providing Service</h2>
+            </div>
+
+            <div class="garageInfo">
+              <div class="header">
+                <h4>Upali Garage (Pvt) Ltd</h4>
+                <div style="margin-right: 15px">
+                  <img src="images/contact.svg" style="width: 35px; height: 35px" />
+                  <img src="images/messages.svg" onclick="navigateMessage()" />
+                </div>
+              </div>
+              <div class="details">
+                <div style="display: flex">
+                  <img src="./images/Star.svg" style="margin-right: 5px" />
+                  <h4>4.8</h4>
+                </div>
+                <h4>Services Areas</h4>
+                <ul>
+                  <li>Oil and Filter Change</li>
+                  <li>Engine Repair</li>
+                  <li>Brake System Repair</li>
+                  <li>Tire Replacement</li>
+                </ul>
+              </div>
+            </div>
+
+            <form onsubmit="navigateHelp(event)">
+              <button type="submit">Any Issue?</button>
+            </form>
+          </div>
+        </template>
+
+        <template id="servicesProvidedTemplate">
+          <div id="servicesProvided" class="garageSection">
+            <div class="listHeader" style="flex-direction: column; text-align: center">
+              <h2>Service Provided!</h2>
+            </div>
+
+            <div class="garageInfo">
+              <div class="header">
+                <h4>Upali Garage (Pvt) Ltd</h4>
+                <div style="margin-right: 15px">
+                  <img src="images/contact.svg" style="width: 35px; height: 35px" />
+                  <img src="images/messages.svg" onclick="navigateMessage()" />
+                </div>
+              </div>
+              <div class="details">
+                <table>
+                  <tr>
+                    <td>Description:</td>
+                    <td>Tire Replacement has been Done</td>
+                  </tr>
+                  <tr>
+                    <td>Amount:</td>
+                    <td>LKR: 10000</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <form class="servicesAction">
+              <button type="button" onclick="navigateHelp(event)">Any Issue?</button>
+              <button type="submit">Pay Now</button>
+            </form>
+          </div>
+        </template>
+
+        <template id="payTemplate">
+          <div id="payService" class="garageSection">
+            <div class="listHeader">
+              <button style="visibility: hidden">
+                <img src="./images/return.svg" style="margin: 0" />
+              </button>
+              <h2>Pay: LKR 10000</h2>
+              <button onclick="reset()">
+                <img src="./images/return.svg" style="margin: 0" />
+              </button>
+            </div>
+
+            <form class="servicesAction">
+              <button type="submit">Pay Cash</button>
+              <button type="submit">Pay Using Card</button>
+            </form>
+          </div>
+        </template>
+
+        <template id="ratingTemplate">
+          <div id="rating" class="garageSection">
+            <div class="listHeader" style="flex-direction: column; text-align: center">
+              <h2>Provide Feedback</h2>
+            </div>
+
+            <form>
+
+              <div class="rate">
+                <input type="radio" id="star1" name="rate" value="1" />
+                <label for="star1" title="text">1 star</label>
+                <input type="radio" id="star2" name="rate" value="2" />
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star3" name="rate" value="3" />
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star4" name="rate" value="4" />
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star5" name="rate" value="5" />
+                <label for="star5" title="text">5 stars</label>
+              </div>
+
+              <textarea id="issue" class="feedback" name="issue" placeholder="Write a Review" type="" required
+                rows="6"></textarea>
+
+              <button type="submit">Submit</button>
+            </form>
+          </div>
+        </template>
+      </div>
+
+      <div class="col-2">
+        <button class="requestBtn">
+          <img src="./images/locate.svg" />Locate Nearby Garages
+        </button>
+        <div class="mapBox">
+
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15842.961706232041!2d79.86053903794337!3d6.921602563503364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1696242394726!5m2!1sen!2sus"
+            width="70%" height="500" style="border:0; border-radius: 10px;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+            <!-- <img src="images/map.png" /> -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="social">
+      <h4>CONTACT US</h4>
+      <div class="socialIcons">
+        <a href="#facebook"><img src="images/facebook.svg" /></a>
+        <a href="#linkedin"><img src="images/linkedin.svg" /></a>
+        <a href="#github"><img src="images/github.svg" /></a>
+        <a href="#whatsapp"><img src="images/whatsapp.svg" /></a>
+      </div>
+    </div>
+    <div class="fSection">
+      <img src="images/logo.png" />
+      <h4>DEVELOPED AND MAINTAINED BY A TEAM OF UNDERGRADUTES AT UCSC</h4>
+    </div>
+  </footer>
+</body>
+
+<script src="js/main.js"></script>
+
+</html>

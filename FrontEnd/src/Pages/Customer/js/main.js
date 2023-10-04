@@ -645,7 +645,7 @@ const submitLogin = (e, formData) => {
               success: function (res) {
                 if (res.status == 200) {
                   alert(res.message);
-                  console.log("Data: " + res.data);
+                  localStorage.setItem("token", res?.data?.token);
                   window.location.href = "index.html";
                 } else {
                   alert(res.data);

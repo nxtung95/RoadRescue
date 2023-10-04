@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : LOCAL_HOME
+ Source Server         : MYSQL_LOCAL
  Source Server Type    : MySQL
- Source Server Version : 80025
+ Source Server Version : 80031
  Source Host           : localhost:3306
  Source Schema         : road_rescue
 
  Target Server Type    : MySQL
- Target Server Version : 80025
+ Target Server Version : 80031
  File Encoding         : 65001
 
- Date: 03/10/2023 22:55:31
+ Date: 04/10/2023 20:47:20
 */
 
 SET NAMES utf8mb4;
@@ -30,11 +30,7 @@ CREATE TABLE `customer`  (
   `timestamp` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`customer_id`) USING BTREE,
   UNIQUE INDEX `contact_num`(`contact_num`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of customer
--- ----------------------------
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for otp
@@ -42,20 +38,14 @@ CREATE TABLE `customer`  (
 DROP TABLE IF EXISTS `otp`;
 CREATE TABLE `otp`  (
   `otp_id` int NOT NULL AUTO_INCREMENT,
-  `customer_id` int NULL DEFAULT NULL,
-  `service_provider_id` int NULL DEFAULT NULL,
+  `mobile_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `otp_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `timestamp` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
-  PRIMARY KEY (`otp_id`) USING BTREE,
-  INDEX `customer_id`(`customer_id`) USING BTREE,
-  INDEX `service_provider_id`(`service_provider_id`) USING BTREE,
-  CONSTRAINT `otp_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `otp_ibfk_2` FOREIGN KEY (`service_provider_id`) REFERENCES `service_provider` (`service_provider_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of otp
--- ----------------------------
+  `expire_timestamp` timestamp(0) NULL DEFAULT NULL,
+  `is_used` tinyint NULL DEFAULT NULL COMMENT '0: not use, 1: used',
+  `wrong_attempts` int NULL DEFAULT NULL,
+  PRIMARY KEY (`otp_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for service_provider
@@ -71,11 +61,7 @@ CREATE TABLE `service_provider`  (
   `timestamp` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`service_provider_id`) USING BTREE,
   UNIQUE INDEX `contact_num`(`contact_num`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of service_provider
--- ----------------------------
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for vehicle
@@ -91,10 +77,6 @@ CREATE TABLE `vehicle`  (
   PRIMARY KEY (`plate_num`) USING BTREE,
   INDEX `owner_id`(`owner_id`) USING BTREE,
   CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of vehicle
--- ----------------------------
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;

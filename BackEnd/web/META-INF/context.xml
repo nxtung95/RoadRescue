@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/">
 	<Resource
-			name="thogakade/pool"
+			name="roadRescue"
 			auth="Container"
 			type="javax.sql.DataSource"
 			maxActive="100"

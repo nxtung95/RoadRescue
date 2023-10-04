@@ -38,23 +38,21 @@ public class OTPServlet extends HttpServlet {
             JsonReader reader = Json.createReader(req.getReader());
             JsonObject jsonObject = reader.readObject();
             String option = jsonObject.getString("option");
-
             connection = ds.getConnection();
             switch (option) {
                 case "SEND_OTP":
                     String mobileNo = jsonObject.getString("mobileNo");
                     String otp = CommonUtils.generateRandomNum(6);
+                    System.out.println("OTP: " + otp);
                     Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-                    Timestamp expireDate = Timestamp.valueOf(LocalDateTime.now().plus(2, ChronoUnit.MINUTES));
+                    Timestamp expireDate = Timestamp.valueOf(LocalDateTime.now().plus(5, ChronoUnit.MINUTES));
                     OtpModel otpModel = new OtpModel(otp, mobileNo, now, expireDate, 0, 0);
                     boolean result = otpController.add(connection, otpModel);
                     if (result) {
-                        // Todo Send OTP to actual mobile no
-
                         JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
                         resp.setStatus(HttpServletResponse.SC_CREATED);
                         objectBuilder.add("status",200);
-                        objectBuilder.add("message","Successfully Added...!");
+                        objectBuilder.add("message","Send otp successfully!");
                         objectBuilder.add("data","");
                         writer.print(objectBuilder.build());
                     }
@@ -74,7 +72,11 @@ public class OTPServlet extends HttpServlet {
                         objectBuilder.add("message","Wrong attempts OTP more than three times.");
                     } else if ("03".equals(code)) {
                         objectBuilder.add("message","Incorrect OTP");
+                    } else if ("00".equals(code)) {
+                        // Success confirm OTP
+                        objectBuilder.add("message","Confirm OTP successfully");
                     }
+                    objectBuilder.add("code", code);
                     objectBuilder.add("data","");
                     writer.print(objectBuilder.build());
                     break;
@@ -82,7 +84,6 @@ public class OTPServlet extends HttpServlet {
                     break;
             }
         } catch (SQLException throwables) {
-            System.out.println("customer check error one");
             JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
             resp.setStatus(HttpServletResponse.SC_OK);
             objectBuilder.add("status",400);
@@ -91,7 +92,6 @@ public class OTPServlet extends HttpServlet {
             writer.print(objectBuilder.build());
             throwables.printStackTrace();
         } catch (ClassNotFoundException a) {
-            System.out.println("customer check error two");
             JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
             resp.setStatus(HttpServletResponse.SC_OK);
             objectBuilder.add("status",400);

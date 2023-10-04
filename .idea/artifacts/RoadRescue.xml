@@ -10,6 +10,10 @@
           <element id="file-copy" path="$PROJECT_DIR$/BackEnd/lib/javax.json-1.1.4.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/BackEnd/lib/javax.json-api-1.1.4.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/BackEnd/lib/mysql-connector-java-5.1.49.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/BackEnd/lib/jjwt-0.9.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/BackEnd/lib/jackson-core-2.15.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/BackEnd/lib/jackson-annotations-2.15.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/BackEnd/lib/jackson-databind-2.15.2.jar" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="BackEnd/web/Web" />

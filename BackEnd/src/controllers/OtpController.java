@@ -15,6 +15,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class OtpController {
+
     public boolean add(Connection connection, OtpModel otpModel) throws SQLException, ClassNotFoundException {
         return  CrudUtil.executeUpdate(connection, "INSERT into otp(otp_code, mobile_no, timestamp, expire_timestamp, is_used, wrong_attempts) values(?,?,?,?,?,?)",
                 otpModel.getOtpCode(), otpModel.getMobileNo(), otpModel.getCreatedTime(), otpModel.getExpiredTime(), otpModel.getIsUsed(), otpModel.getWrongAttempts());
@@ -49,7 +50,7 @@ public class OtpController {
             return "";
         }
         if (otpModel != null && otp.equalsIgnoreCase(otpModel.getOtpCode())) {
-            if (otpModel.getCreatedTime().toLocalDateTime().isBefore(LocalDateTime.now())) {
+            if (otpModel.getExpiredTime().toLocalDateTime().isBefore(LocalDateTime.now())) {
                 // otp number expire
                 return "01";
             } else {
@@ -79,6 +80,6 @@ public class OtpController {
 
     private void update(Connection connection, OtpModel otpModel) throws SQLException, ClassNotFoundException {
         CrudUtil.executeUpdate(connection, "UPDATE otp SET otp_code = ?, mobile_no = ?, timestamp = ?, expire_timestamp = ?, is_used = ?, wrong_attempts = ? WHERE otp_id = ?",
-                otpModel.getOtpCode(), otpModel.getMobileNo(), otpModel.getCreatedTime(), otpModel.getExpiredTime(), otpModel.getIsUsed(), otpModel.getWrongAttempts());
+                otpModel.getOtpCode(), otpModel.getMobileNo(), otpModel.getCreatedTime(), otpModel.getExpiredTime(), otpModel.getIsUsed(), otpModel.getWrongAttempts(), otpModel.getOtpId());
     }
 }

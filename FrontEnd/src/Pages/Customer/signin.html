@@ -49,8 +49,8 @@
               type="tel"
               required
             />
-            <a href="#opt">Send OTP</a>
-            <input id="opt" name="opt" placeholder="OTP" type="text" required />
+            <a href="#opt" onclick="sendOTP()">Send OTP</a>
+            <input id="opt" name="opt" placeholder="OTP" type="text" onkeypress="return onlyNumberKey(event)" required />
             <button type="submit">Log In</button>
           </form>
 
@@ -70,4 +70,6 @@
   </body>
 
   <script src="js/main.js"></script>
+  <script src="../../assets/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/jQuery/jquery-3.6.0.min.js"></script>
 </html>

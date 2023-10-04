@@ -10,6 +10,15 @@ public class CustomerModel {
     private String email;
     private Timestamp timestamp;
 
+    public CustomerModel(int customerId, String fName, String lName, String contactNum, String email) {
+        this.customerId = customerId;
+        this.setfName(fName);
+        this.setlName(lName);
+        this.setContactNum(contactNum);
+        this.setEmail(email);
+        this.timestamp = new Timestamp(System.currentTimeMillis());
+    }
+
     public CustomerModel(String fName, String lName, String contactNum, String email) {
         this.setfName(fName);
         this.setlName(lName);

@@ -525,22 +525,151 @@ const addCard = (e) => {
 
 const submitRegistration = (e, formData) => {
   e.preventDefault();
-  console.log(formData?.phone?.value);
-  console.log(formData?.opt?.value);
-  console.log(formData?.firstName?.value);
-  console.log(formData?.lastName?.value);
-  alert("Registered");
+  const phone = formData?.phone?.value;
+  const otp = formData?.opt?.value;
+  const firstName = formData?.firstName?.value;
+  const lastName = formData?.lastName?.value;
 
-  window.location.href = "index.html";
+  if (!phone) {
+    alert("Please enter phone number");
+    return;
+  } else if (!otp || otp.length < 6) {
+    alert("Please enter otp");
+    return;
+  } else if (!firstName) {
+    alert("Please enter first name");
+    return;
+  } else if (!lastName) {
+    alert("Please enter last name");
+    return;
+  }
+
+  // Confirm OTP first
+  if (otp.length >= 6) {
+    const data = {
+      mobileNo: phone,
+      option: "CONFIRM_OTP",
+      otp: otp
+    }
+
+    $.ajax({
+      url: "http://localhost:8082/RoadRescue/otp",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      success: function (res) {
+        if (res.status == 200) {
+          if (res.code === "00") {
+            // Success
+            const registrationData = {
+              mobileNo: phone,
+              firstName: firstName,
+              lastName: lastName,
+              option: "REGISTRATION"
+            };
+            // Create customer
+            $.ajax({
+              url: "http://localhost:8082/RoadRescue/customer",
+              method: "POST",
+              contentType: "application/json",
+              data: JSON.stringify(registrationData),
+              success: function (res) {
+                if (res.status == 200) {
+                  alert(res.message);
+                  window.location.href = "index.html";
+                } else {
+                  alert(res.data);
+                  window.location.reload();
+                }
+              }, error: function (ob, textStatus, error) {
+                alert(textStatus);
+              }
+            });
+          } else {
+            alert(res.message);
+            if (res.code !== "03") {
+              window.location.reload();
+            }
+          }
+        } else {
+          alert(res.data);
+          window.location.reload();
+        }
+      }, error: function (ob, textStatus, error) {
+        alert(textStatus);
+      }
+    });
+  }
 };
 
 const submitLogin = (e, formData) => {
   e.preventDefault();
-  console.log(formData?.phone?.value);
-  console.log(formData?.opt?.value);
-  alert("Logged In");
 
-  window.location.href = "index.html";
+  const phone = formData?.phone?.value;
+  const otp = formData?.opt?.value;
+
+  if (!phone) {
+    alert("Please enter phone number");
+    return;
+  } else if (!otp || otp.length < 6) {
+    alert("Please enter otp");
+    return;
+  }
+  // Confirm OTP first
+  if (otp.length >= 6) {
+    const data = {
+      mobileNo: phone,
+      option: "CONFIRM_OTP",
+      otp: otp
+    }
+
+    $.ajax({
+      url: "http://localhost:8082/RoadRescue/otp",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      success: function (res) {
+        if (res.status == 200) {
+          if (res.code === "00") {
+            // Success
+            const loginData = {
+              mobileNo: phone,
+              option: "LOGIN"
+            };
+            // Login and get token
+            $.ajax({
+              url: "http://localhost:8082/RoadRescue/customer",
+              method: "POST",
+              contentType: "application/json",
+              data: JSON.stringify(loginData),
+              success: function (res) {
+                if (res.status == 200) {
+                  alert(res.message);
+                  console.log("Data: " + res.data);
+                  window.location.href = "index.html";
+                } else {
+                  alert(res.data);
+                  window.location.reload();
+                }
+              }, error: function (ob, textStatus, error) {
+                alert(textStatus);
+              }
+            });
+          } else {
+            alert(res.message);
+            if (res.code !== "03") {
+              window.location.reload();
+            }
+          }
+        } else {
+          alert(res.data);
+          window.location.reload();
+        }
+      }, error: function (ob, textStatus, error) {
+        alert(textStatus);
+      }
+    });
+  }
 };
 
 const logout = (e, formData) => {
@@ -566,3 +695,40 @@ const notificationAlert = () => {
     icon.src = "images/notifications.svg";
   }
 };
+
+// -------------------- OTP ----------------------
+const sendOTP = () => {
+  const mobileNo = $('#phone').val();
+  if (!mobileNo) {
+    alert("Please enter your phone number!");
+    return;
+  }
+  var data = {
+    mobileNo: mobileNo,
+    option: "SEND_OTP"
+  }
+
+  $.ajax({
+    url: "http://localhost:8082/RoadRescue/otp",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify(data),
+    success: function (res) {
+      if (res.status == 200) {
+        alert(res.message);
+      } else {
+        alert(res.data);
+      }
+    }, error: function (ob, textStatus, error) {
+      alert(textStatus);
+    }
+  });
+}
+
+const onlyNumberKey = (evt) => {
+  // Only ASCII character in that range allowed
+  var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+  if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+    return false;
+  return true;
+}

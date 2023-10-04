@@ -2,6 +2,8 @@ package servlet;
 
 
 import controllers.CustomerController;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import models.CustomerModel;
 
 import javax.annotation.Resource;
@@ -16,6 +18,9 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet(urlPatterns = "/customer")
 public class CustomerServlet extends HttpServlet {
@@ -23,7 +28,7 @@ public class CustomerServlet extends HttpServlet {
     @Resource(name = "java:comp/env/roadRescue")
     DataSource ds;
 
-    CustomerController customer=new CustomerController();
+    CustomerController customerController = new CustomerController();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -38,7 +43,7 @@ public class CustomerServlet extends HttpServlet {
 
                 case "SEARCH":
 
-                    CustomerModel searchCustomer = customer.search(connection, searchId);
+                    CustomerModel searchCustomer = customerController.search(connection, searchId);
                     if (searchCustomer!=null) {
                         int customerId = searchCustomer.getCustomerId();
                         String fName = searchCustomer.getfName();
@@ -90,7 +95,7 @@ public class CustomerServlet extends HttpServlet {
                     }*/
 
 
-                    JsonArray allCustomers = customer.getAll(connection);
+                    JsonArray allCustomers = customerController.getAll(connection);
                     JsonObjectBuilder response = Json.createObjectBuilder();
                     response.add("status",200);
                     response.add("message","Done");
@@ -110,7 +115,7 @@ public class CustomerServlet extends HttpServlet {
                     }*/
 
 
-                    JsonArray allCustomersId = customer.getCustomerId(connection);
+                    JsonArray allCustomersId = customerController.getCustomerId(connection);
                     JsonObjectBuilder responseGetCstId = Json.createObjectBuilder();
                     responseGetCstId.add("status",200);
                     responseGetCstId.add("message","Done");
@@ -140,33 +145,77 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        JsonReader reader = Json.createReader(req.getReader());
-        JsonObject jsonObject = reader.readObject();
-        String fName = jsonObject.getString("fName");
-        String lName = jsonObject.getString("lName");
-        String contactNum = jsonObject.getString("contactNum");
-        String email = jsonObject.getString("email");
-
         PrintWriter writer = resp.getWriter();
         resp.setContentType("application/json");
+        Connection connection = null;
         try {
-            Connection connection = ds.getConnection();
-            CustomerModel customerDTO = new CustomerModel(fName, lName, contactNum, email);
-            boolean result = customer.add(connection, customerDTO);
+            JsonReader reader = Json.createReader(req.getReader());
+            JsonObject jsonObject = reader.readObject();
+            String option = jsonObject.getString("option");
+            switch (option) {
+                case "REGISTRATION":
+                    String fName = jsonObject.getString("firstName");
+                    String lName = jsonObject.getString("lastName");
+                    String contactNum = jsonObject.getString("mobileNo");
+                    String email = "";
 
-            resp.addHeader("Access-Control-Allow-Origin","*");
-            resp.addHeader("Access-Control-Allow-Methods", "DELETE, PUT");
-            resp.addHeader("Access-Control-Allow-Headers", "Content-Type");
+                    connection = ds.getConnection();
+                    boolean checkExistMobileNo = customerController.checkExistMobileNo(connection, contactNum);
+                    if (checkExistMobileNo) {
+                        // Exist mobile no
+                        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                        resp.setStatus(HttpServletResponse.SC_OK);
+                        objectBuilder.add("status",400);
+                        objectBuilder.add("message","Error");
+                        objectBuilder.add("data", "This phone number have existed!");
+                        writer.print(objectBuilder.build());
+                        return;
+                    }
+                    CustomerModel customerDTO = new CustomerModel(fName, lName, contactNum, email);
+                    boolean result = customerController.add(connection, customerDTO);
+                    if (result){
+                        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                        resp.setStatus(HttpServletResponse.SC_CREATED);
+                        objectBuilder.add("status",200);
+                        objectBuilder.add("message","Successfully Added...!");
+                        objectBuilder.add("data","");
+                        writer.print(objectBuilder.build());
+                    }
+                    break;
+                case "LOGIN":
+                    contactNum = jsonObject.getString("mobileNo");
+                    connection = ds.getConnection();
+                    JsonObject customer = customerController.getCustomerByMobileNo(connection, contactNum);
+                    if (customer == null) {
+                        // Not exist customer in the system
+                        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                        resp.setStatus(HttpServletResponse.SC_OK);
+                        objectBuilder.add("status",400);
+                        objectBuilder.add("message","Error");
+                        objectBuilder.add("data", "This customer is not registered!");
+                        writer.print(objectBuilder.build());
+                        return;
+                    }
+                    //Generate a JWT token
+                    Map<String, Object> claims = new HashMap<>();
+                    String jwtToken = Jwts.builder().setClaims(claims).setSubject(customer.toString()).setIssuedAt(new Date(System.currentTimeMillis()))
+                            .setExpiration(new Date(System.currentTimeMillis() + 18000 * 1000))
+                            .signWith(SignatureAlgorithm.HS512, "roadRescue@key123").compact();
 
-            if (result){
-                JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-                resp.setStatus(HttpServletResponse.SC_CREATED);
-                objectBuilder.add("status",200);
-                objectBuilder.add("message","Successfully Added...!");
-                objectBuilder.add("data","");
-                writer.print(objectBuilder.build());
+                    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                    objectBuilder.add("status",200);
+                    objectBuilder.add("message","Successfully Login...!");
+
+                    JsonObjectBuilder dataObjectBuilder = Json.createObjectBuilder();
+                    dataObjectBuilder.add("token", jwtToken);
+                    dataObjectBuilder.add("customer", customer);
+                    objectBuilder.add("data", dataObjectBuilder.build());
+                    writer.print(objectBuilder.build());
+                    break;
+                default:
+                    break;
             }
-            connection.close();
         } catch (SQLException throwables) {
             System.out.println("customer check error one");
             JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
@@ -185,6 +234,12 @@ public class CustomerServlet extends HttpServlet {
             objectBuilder.add("data",a.getLocalizedMessage());
             writer.print(objectBuilder.build());
             a.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+
+            }
         }
 
     }
@@ -198,7 +253,7 @@ public class CustomerServlet extends HttpServlet {
         try {
             Connection connection = ds.getConnection();
 
-            boolean result = customer.delete(connection, cstId);
+            boolean result = customerController.delete(connection, cstId);
             /*PreparedStatement pst = connection.prepareStatement("Delete from Customer where id=?");
             pst.setObject(1, cstId);*/
 
@@ -250,7 +305,7 @@ public class CustomerServlet extends HttpServlet {
         try {
             Connection connection = ds.getConnection();
             CustomerModel customerDTO = new CustomerModel(fName, lName, contactNum, email);
-            boolean result = customer.update(connection, customerDTO);
+            boolean result = customerController.update(connection, customerDTO);
 
             /*PreparedStatement stm = connection.prepareStatement("UPDATE customer SET name=?,address=?,salary=? where id=?");
             stm.setString(1,customerName);

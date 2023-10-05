@@ -129,7 +129,7 @@
       <template id="vehicleTemplate">
         <div id="vehicle" style="width: 50%">
           <h1>Vehicles</h1>
-          <div class="vehicleSection">
+          <div id="viewVehicleTable" class="vehicleSection">
             <table>
               <tr>
                 <th>Vehicle</th>
@@ -138,18 +138,18 @@
                 <th></th>
               </tr>
 
-              <tr id="vehicle-1">
+              <tr id="vehicle">
                 <td>Toyota Axio 2017</td>
                 <td>CAV 8508</td>
                 <td>Car</td>
                 <td style="padding: 0 0 0 5px">
                   <img
                     src="images/edit2.svg"
-                    onclick="editVehicle('vehicle-1')"
+                    onclick="editVehicle('vehicle')"
                   />
                   <img
                     src="images/delete.svg"
-                    onclick="deleleVehicle('vehicle-1')"
+                    onclick="deleleVehicle('vehicle')"
                   />
                 </td>
               </tr>
@@ -247,6 +247,7 @@
   </body>
 
   <script src="js/main.js"></script>
+  <script src="js/vehicles.js"></script>
   <script src="../../assets/js/bootstrap.bundle.min.js"></script>
   <script src="../../assets/jQuery/jquery-3.6.0.min.js"></script>
 </html>

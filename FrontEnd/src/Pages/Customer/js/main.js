@@ -301,64 +301,6 @@ const navigateMessage = () => {
   window.location.href = "message.html";
 }
 
-// ----------------------- Vehicle ----------------------
-
-const vehicle = () => {
-  if ("content" in document.createElement("template")) {
-    const vehicleContainer =
-      document.getElementById("vehicleContainer") ||
-      document.getElementById("editVehicle");
-    if (!!vehicleContainer) {
-      const template = document.getElementById("vehicleTemplate");
-      if (!!template) {
-        const clone = template.content.cloneNode(true);
-        vehicleContainer.replaceWith(clone);
-      }
-    }
-  }
-};
-
-const editVehicle = (id) => {
-  console.log("Edit Vehicle:", id);
-  const data = document.getElementById(id).querySelectorAll("td");
-  console.log(data[0].innerText);
-  console.log(data[1].innerText);
-  console.log(data[2].innerText);
-
-  alert("Vehicle Editted");
-};
-
-const deleleVehicle = (id) => {
-  console.log("Delete Vehicle", id);
-  const data = document.getElementById(id).querySelectorAll("td");
-  console.log(data[0].innerText);
-  console.log(data[1].innerText);
-  console.log(data[2].innerText);
-
-  alert("Vehicle Deleted");
-};
-
-const addVehicle = () => {
-  if ("content" in document.createElement("template")) {
-    const vehicleContainer = document.getElementById("vehicle");
-    if (!!vehicleContainer) {
-      const template = document.getElementById("editVehicleTemplate");
-      if (!!template) {
-        const clone = template.content.cloneNode(true);
-        vehicleContainer.replaceWith(clone);
-      }
-    }
-  }
-};
-
-const vehicleSubmit = (e, formData) => {
-  e.preventDefault();
-  alert("Vehicle Added");
-  vehicle();
-};
-
-// -----------------------------------
-
 window.addEventListener("click", function (e) {
   if (
     (!!document.querySelector(".profileIcon") &&

@@ -41,7 +41,8 @@
         <div class="user-form">
           <h1>Register in Road-Rescue</h1>
 
-          <form onsubmit="submitRegistration(event, this)">
+          <p><small class="text-danger pl-1" id="error"></small></p>
+          <form id="registrationForm" onsubmit="submitRegistration(event, this)">
             <input
               id="phone"
               name="phone"
@@ -86,6 +87,7 @@
   </body>
 
   <script src="js/main.js"></script>
+  <script src="js/signup.js"></script>
   <script src="../../assets/js/bootstrap.bundle.min.js"></script>
   <script src="../../assets/jQuery/jquery-3.6.0.min.js"></script>
 </html>

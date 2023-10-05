@@ -42,6 +42,7 @@ const submitLogin = (e, formData) => {
                 if (res.status == 200) {
                   alert(res.message);
                   localStorage.setItem("token", res?.data?.token);
+                  localStorage.setItem("customer", JSON.stringify(res?.data?.customer));
                   window.location.href = "index.html";
                 } else {
                   alert(res.data);

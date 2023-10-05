@@ -27,7 +27,7 @@ import java.util.function.Function;
 
 @WebFilter(urlPatterns = "/*")
 public class JwtRequestFilter implements Filter {
-
+    private static final String REGEX_DEAULT_URL = "/RoadRescue/$";
     private CustomerController customerController = new CustomerController();
 
     @Resource(name = "java:comp/env/roadRescue")
@@ -42,11 +42,12 @@ public class JwtRequestFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
         HttpServletResponse servletResponse = (HttpServletResponse) response;
-        if (servletRequest.getRequestURI().contains("/otp")) {
+        String uri = servletRequest.getRequestURI();
+        if (uri.contains("/otp") || uri.matches(REGEX_DEAULT_URL)) {
             chain.doFilter(request, response);
             return;
         }
-        if (servletRequest.getRequestURI().contains("/customer") && "POST".equalsIgnoreCase(servletRequest.getMethod())) {
+        if (uri.contains("/customer") && "POST".equalsIgnoreCase(servletRequest.getMethod())) {
             chain.doFilter(request, response);
             return;
         }

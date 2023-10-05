@@ -1,7 +1,7 @@
 package servlet;
 
 import controllers.VehicleController;
-import models.VehicleModel;
+import models.Vehicle;
 
 import javax.annotation.Resource;
 import javax.json.*;
@@ -30,21 +30,46 @@ public class VehicleServlet extends HttpServlet {
         Connection connection = null;
         try {
             connection = ds.getConnection();
+            String option = req.getParameter("option");
             // Get customerId when sign in
             HttpSession session = req.getSession();
             int customerId = (int) session.getAttribute("customerId");
-            JsonArray allVehicles = vehicleController.getAllByCustomerId(connection, customerId);
-            JsonObjectBuilder response = Json.createObjectBuilder();
-            response.add("status",200);
-            response.add("message","Done");
-            response.add("data", allVehicles);
-            writer.print(response.build());
+            switch (option) {
+                case "GETALL":
+                    JsonArray allVehicles = vehicleController.getAllByCustomerId(connection, customerId);
+                    JsonObjectBuilder response = Json.createObjectBuilder();
+                    response.add("status",200);
+                    response.add("message","Done");
+                    response.add("data", allVehicles);
+                    writer.print(response.build());
+                    break;
+                case "VIEW":
+                    String plateNum = req.getParameter("plateNum");
+                    JsonObject vehicle = vehicleController.getByCustomerIdAndPlateNum(connection, customerId, plateNum);
+                    if (vehicle == null) {
+                        response = Json.createObjectBuilder();
+                        resp.setStatus(HttpServletResponse.SC_OK);
+                        response.add("status",400);
+                        response.add("message","The vehicle have not existed");
+                        response.add("data","");
+                        writer.print(response.build());
+                        return;
+                    }
+                    response = Json.createObjectBuilder();
+                    response.add("status",200);
+                    response.add("message","Done");
+                    response.add("data", vehicle);
+                    writer.print(response.build());
+                    break;
+                default:
+                    break;
+            }
         } catch (SQLException throwables) {
             JsonObjectBuilder response = Json.createObjectBuilder();
             resp.setStatus(HttpServletResponse.SC_OK);
             response.add("status",400);
             response.add("message","Error");
-            response.add("data",throwables.getLocalizedMessage());
+            response.add("data","");
             writer.print(response.build());
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -52,7 +77,7 @@ public class VehicleServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_OK);
             response.add("status",400);
             response.add("message","Error");
-            response.add("data",e.getLocalizedMessage());
+            response.add("data","");
             writer.print(response.build());
             e.printStackTrace();
         } finally {
@@ -68,24 +93,24 @@ public class VehicleServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        JsonReader reader = Json.createReader(req.getReader());
-        JsonObject jsonObject = reader.readObject();
-        String plateNum = jsonObject.getString("plateNum");
-        String make = jsonObject.getString("make");
-        int year = jsonObject.getInt("year");
-        String model = jsonObject.getString("model");
-        String type = jsonObject.getString("type");
-
         PrintWriter writer = resp.getWriter();
         resp.setContentType("application/json");
         Connection connection = null;
         try {
+            JsonReader reader = Json.createReader(req.getReader());
+            JsonObject jsonObject = reader.readObject();
+            String plateNum = jsonObject.getString("plateNum");
+            int makeId = Integer.parseInt(jsonObject.getString("makeId"));
+            int year = Integer.parseInt(jsonObject.getString("year"));
+            int modelId = Integer.parseInt(jsonObject.getString("modelId"));
+            String type = jsonObject.getString("type");
+
             connection = ds.getConnection();
             HttpSession session = req.getSession();
             int customerId = (int) session.getAttribute("customerId");
-            VehicleModel vehicleModel = new VehicleModel(plateNum, make, year, model, type, customerId);
+            Vehicle vehicle = new Vehicle(plateNum, makeId, year, modelId, type, customerId);
 
-            if (vehicleController.checkExistPlateNum(connection, vehicleModel.getOwnerId(), vehicleModel.getPlateNum())) {
+            if (vehicleController.checkExistPlateNum(connection, vehicle.getOwnerId(), vehicle.getPlateNum())) {
                 //Exist plate num
                 JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
                 resp.setStatus(HttpServletResponse.SC_OK);
@@ -96,7 +121,7 @@ public class VehicleServlet extends HttpServlet {
                 return;
             }
 
-            boolean result = vehicleController.add(connection, vehicleModel);
+            boolean result = vehicleController.add(connection, vehicle);
 
             if (result) {
                 JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
@@ -114,21 +139,17 @@ public class VehicleServlet extends HttpServlet {
                 writer.print(objectBuilder.build());
             }
         } catch (SQLException throwables) {
-            System.out.println("customer check error one");
             JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
             resp.setStatus(HttpServletResponse.SC_OK);
             objectBuilder.add("status",400);
             objectBuilder.add("message","Error");
-            objectBuilder.add("data",throwables.getLocalizedMessage());
             writer.print(objectBuilder.build());
             throwables.printStackTrace();
         } catch (ClassNotFoundException a) {
-            System.out.println("customer check error two");
             JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
             resp.setStatus(HttpServletResponse.SC_OK);
             objectBuilder.add("status",400);
             objectBuilder.add("message","Error");
-            objectBuilder.add("data",a.getLocalizedMessage());
             writer.print(objectBuilder.build());
             a.printStackTrace();
         } finally {
@@ -200,9 +221,9 @@ public class VehicleServlet extends HttpServlet {
         JsonReader reader = Json.createReader(req.getReader());
         JsonObject jsonObject = reader.readObject();
         String plateNum = jsonObject.getString("plateNum");
-        String make = jsonObject.getString("make");
-        int year = jsonObject.getInt("year");
-        String model = jsonObject.getString("model");
+        int makeId = Integer.parseInt(jsonObject.getString("makeId"));
+        int year = Integer.parseInt(jsonObject.getString("year"));
+        int modelId = Integer.parseInt(jsonObject.getString("modelId"));
         String type = jsonObject.getString("type");
 
         PrintWriter writer = resp.getWriter();
@@ -212,8 +233,8 @@ public class VehicleServlet extends HttpServlet {
             connection = ds.getConnection();
             HttpSession session = req.getSession();
             int customerId = (int) session.getAttribute("customerId");
-            VehicleModel vehicleModel = new VehicleModel(plateNum, make, year, model, type, customerId);
-            boolean result = vehicleController.update(connection, vehicleModel);
+            Vehicle vehicle = new Vehicle(plateNum, makeId, year, modelId, type, customerId);
+            boolean result = vehicleController.update(connection, vehicle);
 
             if (result) {
                 JsonObjectBuilder objectBuilder = Json.createObjectBuilder();

@@ -129,29 +129,13 @@
       <template id="vehicleTemplate">
         <div id="vehicle" style="width: 50%">
           <h1>Vehicles</h1>
-          <div id="viewVehicleTable" class="vehicleSection">
-            <table>
+          <div class="vehicleSection">
+            <table id="viewVehicleTable">
               <tr>
                 <th>Vehicle</th>
                 <th>Number Plate</th>
                 <th>Type</th>
                 <th></th>
-              </tr>
-
-              <tr id="vehicle">
-                <td>Toyota Axio 2017</td>
-                <td>CAV 8508</td>
-                <td>Car</td>
-                <td style="padding: 0 0 0 5px">
-                  <img
-                    src="images/edit2.svg"
-                    onclick="editVehicle('vehicle')"
-                  />
-                  <img
-                    src="images/delete.svg"
-                    onclick="deleleVehicle('vehicle')"
-                  />
-                </td>
               </tr>
             </table>
 
@@ -165,12 +149,20 @@
         </div>
       </template>
 
-      <template id="editVehicleTemplate">
-        <div id="editVehicle" style="width: 50%">
+      <template id="addVehicleTemplate">
+        <div id="addVehicle" style="width: 50%">
           <h1>Add New Vehicle</h1>
           <div class="vehicleSection">
             <form onsubmit="vehicleSubmit(event, this)">
               <table>
+                <tr>
+                  <td>Make:</td>
+                  <td>
+                    <select id="make" name="make" onchange="selectMake()" required>
+                      <option selected disabled hidden value="">Select make</option>
+                    </select>
+                  </td>
+                </tr>
                 <tr>
                   <td>Model:</td>
                   <td>
@@ -180,18 +172,24 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Make:</td>
-                  <td>
-                    <select id="make" name="make" required>
-                      <option selected disabled hidden>Select make</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
                   <td>Year:</td>
                   <td>
                     <select id="year" name="year" required>
-                      <option selected disabled hidden>Select year</option>
+                      <option selected disabled hidden value="">Select year</option>
+                      <option value="2010">2010</option>
+                      <option value="2011">2011</option>
+                      <option value="2012">2012</option>
+                      <option value="2013">2013</option>
+                      <option value="2014">2014</option>
+                      <option value="2015">2015</option>
+                      <option value="2016">2016</option>
+                      <option value="2017">2017</option>
+                      <option value="2018">2018</option>
+                      <option value="2019">2019</option>
+                      <option value="2020">2020</option>
+                      <option value="2021">2021</option>
+                      <option value="2022">2022</option>
+                      <option value="2023">2023</option>
                     </select>
                   </td>
                 </tr>
@@ -206,6 +204,8 @@
                   <td>
                     <select id="type" name="type" required>
                       <option selected disabled hidden>Select type</option>
+                      <option value="Car">Car</option>
+                      <option value="Bike">Bike</option>
                     </select>
                   </td>
                 </tr>
@@ -220,6 +220,85 @@
                 </button>
                 <button type="submit" >
                   <img src="images/save.svg" style="margin-right: 10px" />Save
+                  Vehicle
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </template>
+
+      <template id="editVehicleTemplate">
+        <div id="editVehicle" style="width: 50%">
+          <h1>Edit Vehicle</h1>
+          <div class="vehicleSection">
+            <form onsubmit="editVehicleSubmit(event, this)">
+              <table>
+                <tr>
+                  <td>Make:</td>
+                  <td>
+                    <select id="make" name="make" onchange="selectMake()" required>
+                      <option selected disabled hidden value="">Select make</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Model:</td>
+                  <td>
+                    <select id="model" name="model" required>
+                      <option selected disabled hidden>Select the model</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Year:</td>
+                  <td>
+                    <select id="year" name="year" required>
+                      <option selected disabled hidden value="">Select year</option>
+                      <option value="2010">2010</option>
+                      <option value="2011">2011</option>
+                      <option value="2012">2012</option>
+                      <option value="2013">2013</option>
+                      <option value="2014">2014</option>
+                      <option value="2015">2015</option>
+                      <option value="2016">2016</option>
+                      <option value="2017">2017</option>
+                      <option value="2018">2018</option>
+                      <option value="2019">2019</option>
+                      <option value="2020">2020</option>
+                      <option value="2021">2021</option>
+                      <option value="2022">2022</option>
+                      <option value="2023">2023</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Number Plate:</td>
+                  <td>
+                    <input id="numberPlate" name="numberPlate" disabled required />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Type:</td>
+                  <td>
+                    <select id="type" name="type" required>
+                      <option selected disabled hidden>Select type</option>
+                      <option value="Car">Car</option>
+                      <option value="Bike">Bike</option>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+
+              <div style="width: 100%">
+                <button type="button" onclick="vehicle()" style="margin-left: 20px">
+                  <img
+                          src="images/cancel.svg"
+                          style="margin-right: 10px"
+                  />Cancel
+                </button>
+                <button type="submit" >
+                  <img src="images/save.svg" style="margin-right: 10px" />Edit
                   Vehicle
                 </button>
               </div>

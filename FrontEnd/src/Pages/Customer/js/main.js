@@ -205,6 +205,12 @@ const reset = () => {
   }
 };
 
+const removeHtmlElement = (arr) => {
+  for (var i = arr.length - 1; i >= 0; --i) {
+    arr[i].remove();
+  }
+}
+
 // ----------------------- Help Request ----------------------
 
 const requestInfo = (el, id) => {

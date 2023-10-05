@@ -34,6 +34,11 @@ public class VehicleController {
         return vehicleArray.build();
     }
 
+    public boolean checkExistPlateNum(Connection connection, int customerId, String plateNum) throws SQLException, ClassNotFoundException {
+        ResultSet rst = CrudUtil.executeQuery(connection, "SELECT  * FROM vehicle WHERE owner_id = ? and plate_num = ?", customerId, plateNum);
+        return rst.next();
+    }
+
     public boolean add(Connection connection, VehicleModel vehicle) throws SQLException, ClassNotFoundException {
         return  CrudUtil.executeUpdate(connection, "INSERT into vehicle(plate_num, make, year, model, type, owner_id) values(?,?,?,?)",
                 vehicle.getPlateNum(), vehicle.getMake(), vehicle.getYear(), vehicle.getModel(), vehicle.getType(), vehicle.getOwnerId());

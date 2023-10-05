@@ -393,8 +393,8 @@ main {
   width: 85%;
 }
 
-#editProfile input[name="fName"],
-#editProfile input[name="lName"],
+#editProfile input[name="firstName"],
+#editProfile input[name="lastName"],
 #editProfile input[name="email"] {
   width: 85%;
   padding: 15px 5%;

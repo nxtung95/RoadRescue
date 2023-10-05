@@ -37,12 +37,8 @@ public class CustomerController {
                 customer.getfName(), customer.getlName(), customer.getContactNum(), customer.getEmail(), customer.getTimestamp());
     }
 
-    public boolean delete(Connection connection,String id) throws SQLException, ClassNotFoundException {
-        return CrudUtil.executeUpdate(connection,"Delete from Customer where customer_id=?",id);
-    }
-
     public boolean update(Connection connection,CustomerModel customer) throws SQLException, ClassNotFoundException {
-        return CrudUtil.executeUpdate(connection,"UPDATE Customer SET f_name=?,l_name=?,contact_num=?,email=? WHERE customer_id=?",customer.getfName(),customer.getlName(),customer.getContactNum(),customer.getEmail(), customer.getCustomerId());
+        return CrudUtil.executeUpdate(connection,"UPDATE Customer SET f_name=?,l_name=?,email=? WHERE customer_id=?",customer.getfName(),customer.getlName(),customer.getEmail(), customer.getCustomerId());
     }
 
     public boolean checkExistMobileNo(Connection connection, String mobileNo) throws SQLException, ClassNotFoundException {

@@ -1,17 +1,16 @@
 package filters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import controllers.CustomerController;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import models.CustomerModel;
 
 import javax.annotation.Resource;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
@@ -42,7 +42,7 @@ public class JwtRequestFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
         HttpServletResponse servletResponse = (HttpServletResponse) response;
-        if (servletRequest.getRequestURI().contains("/otp") || servletRequest.getRequestURI().contains("/")) {
+        if (servletRequest.getRequestURI().contains("/otp")) {
             chain.doFilter(request, response);
             return;
         }
@@ -51,10 +51,12 @@ public class JwtRequestFilter implements Filter {
             return;
         }
         String jwtToken = extractTokenFromRequest(servletRequest);
-        CustomerModel customer = null;
+        JsonObject customer = null;
         if (jwtToken != null && !jwtToken.isEmpty()) {
             try {
-                customer = getUserFromToken(jwtToken);
+                if (!isTokenExpired(jwtToken)) {
+                    customer = getUserFromToken(jwtToken);
+                }
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
@@ -62,6 +64,8 @@ public class JwtRequestFilter implements Filter {
             }
         } else {
             System.out.println("JWT Token does not begin with Bearer String");
+        }
+        if (customer == null) {
             PrintWriter writer = response.getWriter();
             response.setContentType("application/json");
             servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -75,36 +79,29 @@ public class JwtRequestFilter implements Filter {
 
         // Once we get the token validate it.
         HttpSession session = servletRequest.getSession();
-        if (customer != null && session.isNew() && session.getAttribute("customerId") == null) {
+        if (customer != null && session.isNew()) {
+            Connection connection = null;
             try {
-                Connection connection = ds.getConnection();
-                JsonObject validCus = customerController.getCustomerById(connection, customer.getCustomerId());
-                if (validateToken(jwtToken, customer, validCus)) {
-                    System.out.println("Validate token success");
+                connection = ds.getConnection();
+                JsonObject validCus = customerController.getCustomerById(connection, customer.getInt("customerId"));
+                if (validCus.getString("mobileNo").equals(customer.getString("mobileNo"))) {
                     session.setAttribute("customerId", validCus.getInt("customerId"));
-                } else {
-                    //Token expired
-                    PrintWriter writer = response.getWriter();
-                    response.setContentType("application/json");
-                    servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    JsonObjectBuilder resp = Json.createObjectBuilder();
-                    resp.add("status",401);
-                    resp.add("message","Unauthorized");
-                    resp.add("data", "JWT token failed");
-                    writer.print(resp.build());
                 }
             } catch (SQLException e) {
                 System.out.println(e.getLocalizedMessage());
             } catch (ClassNotFoundException e) {
                 System.out.println(e.getLocalizedMessage());
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+
+                    }
+                }
             }
         }
         chain.doFilter(request, response);
-    }
-
-    private boolean validateToken(String jwtToken, CustomerModel customerModel, JsonObject validCus) {
-        int validCusId = validCus.getInt("customerId");
-        return ((validCusId == customerModel.getCustomerId()) && !isTokenExpired(jwtToken));
     }
 
     @Override
@@ -117,17 +114,20 @@ public class JwtRequestFilter implements Filter {
         return expiration.before(new Date());
     }
 
-    private CustomerModel getUserFromToken(String jwtToken) throws JsonProcessingException {
+    private JsonObject getUserFromToken(String jwtToken) throws JsonProcessingException {
         String obj = getClaimFromToken(jwtToken, Claims::getSubject);
-        return new ObjectMapper().readValue(obj, CustomerModel.class);
+        JsonReader jsonReader = Json.createReader(new StringReader(obj));
+        JsonObject object = jsonReader.readObject();
+        jsonReader.close();
+        return object;
     }
 
-    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = Jwts.parser().setSigningKey("roadRescue@key123").parseClaimsJws(token).getBody();
         return claimsResolver.apply(claims);
     }
 
-    public String extractTokenFromRequest(HttpServletRequest request) {
+    private String extractTokenFromRequest(HttpServletRequest request) {
         final String requestTokenHeader = request.getHeader("Authorization");
         String jwtToken = "";
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {

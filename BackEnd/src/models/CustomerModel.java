@@ -27,6 +27,14 @@ public class CustomerModel {
         this.timestamp = new Timestamp(System.currentTimeMillis());
     }
 
+    public CustomerModel(int customerId, String fName, String lName, String email) {
+        this.customerId = customerId;
+        this.setfName(fName);
+        this.setlName(lName);
+        this.setEmail(email);
+        this.timestamp = new Timestamp(System.currentTimeMillis());
+    }
+
     public CustomerModel() {
     }
 

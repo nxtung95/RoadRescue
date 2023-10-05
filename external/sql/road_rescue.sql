@@ -11,7 +11,7 @@
  Target Server Version : 80031
  File Encoding         : 65001
 
- Date: 04/10/2023 20:47:20
+ Date: 05/10/2023 12:02:44
 */
 
 SET NAMES utf8mb4;
@@ -30,7 +30,11 @@ CREATE TABLE `customer`  (
   `timestamp` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`customer_id`) USING BTREE,
   UNIQUE INDEX `contact_num`(`contact_num`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of customer
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for otp
@@ -48,6 +52,10 @@ CREATE TABLE `otp`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
+-- Records of otp
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for service_provider
 -- ----------------------------
 DROP TABLE IF EXISTS `service_provider`;
@@ -61,7 +69,11 @@ CREATE TABLE `service_provider`  (
   `timestamp` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`service_provider_id`) USING BTREE,
   UNIQUE INDEX `contact_num`(`contact_num`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of service_provider
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for vehicle
@@ -78,5 +90,9 @@ CREATE TABLE `vehicle`  (
   INDEX `owner_id`(`owner_id`) USING BTREE,
   CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of vehicle
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;

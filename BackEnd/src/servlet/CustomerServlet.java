@@ -199,22 +199,17 @@ public class CustomerServlet extends HttpServlet {
         JsonObject jsonObject = reader.readObject();
         String fName = jsonObject.getString("firstName");
         String lName = jsonObject.getString("lastName");
-        String contactNum = jsonObject.getString("mobileNo");
-        String email = "email";
+        String email = jsonObject.getString("email");
 
         Connection connection = null;
         PrintWriter writer = resp.getWriter();
         resp.setContentType("application/json");
         try {
             connection = ds.getConnection();
-            CustomerModel customerDTO = new CustomerModel(fName, lName, contactNum, email);
+            HttpSession session = req.getSession();
+            int customerId = (int) session.getAttribute("customerId");
+            CustomerModel customerDTO = new CustomerModel(customerId, fName, lName, email);
             boolean result = customerController.update(connection, customerDTO);
-
-            /*PreparedStatement stm = connection.prepareStatement("UPDATE customer SET name=?,address=?,salary=? where id=?");
-            stm.setString(1,customerName);
-            stm.setString(2,customerAddress);
-            stm.setDouble(3,customerSalary);
-            stm.setString(4,customerId);*/
 
             if (result) {
                 JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
@@ -222,7 +217,7 @@ public class CustomerServlet extends HttpServlet {
                 objectBuilder.add("message", "Successfully Updated");
                 objectBuilder.add("data", "");
                 writer.print(objectBuilder.build());
-            }else {
+            } else {
                 JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
                 resp.setStatus(HttpServletResponse.SC_OK);
                 objectBuilder.add("status", 400);
@@ -230,7 +225,6 @@ public class CustomerServlet extends HttpServlet {
                 objectBuilder.add("data", "");
                 writer.print(objectBuilder.build());
             }
-            connection.close();
         } catch (SQLException throwables) {
             JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
             resp.setStatus(HttpServletResponse.SC_OK);

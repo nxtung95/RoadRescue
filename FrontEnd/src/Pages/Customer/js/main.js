@@ -77,28 +77,55 @@ const serviceForm = () => {
 
   if(url.includes("index.html"))
   {
-    document.getElementById("menu").classList.add("hide");
-    if ("content" in document.createElement("template")) {
-      const garageSection = document.getElementById("garageList") || document.getElementById("garageInfo");
-      if (!!garageSection) {
+    $.ajax({
+      url: "http://localhost:8082/RoadRescue/vehicle?option=GETALL",
+      method: "GET",
+      contentType: "application/json",
+      beforeSend: function(request) {
+        request.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+      },
+      success: function (res) {
+        if (res.status == 200) {
+          document.getElementById("menu").classList.add("hide");
+          if ("content" in document.createElement("template")) {
+            const garageSection = document.getElementById("garageList") || document.getElementById("garageInfo");
+            if (!!garageSection) {
 
-        const buttons = document.querySelectorAll(".requestBtn");
-        for (let i = 0; i < buttons?.length; i++) {
-          buttons[i].disabled = true;
-          buttons[i].classList?.add("disabled");
+              const buttons = document.querySelectorAll(".requestBtn");
+              for (let i = 0; i < buttons?.length; i++) {
+                buttons[i].disabled = true;
+                buttons[i].classList?.add("disabled");
+              }
+
+
+              document.querySelector(".activityButton").classList.add("disabled");
+              document.querySelector(".navActions").classList.add("disableEvent");
+
+
+              const template = document.getElementById("serviceFormTemplate");
+              const clone = template?.content?.cloneNode(true);
+
+              garageSection.replaceWith(clone);
+            }
+          }
+
+          const vehicleSelect = document.getElementById("vehicle");
+          const optionVehicle = vehicleSelect.getElementsByTagName("option");
+          removeHtmlElement(optionVehicle);
+
+          const vehicles = res.data;
+          if (vehicles) {
+            var html = '<option selected disabled hidden>Select your Vehicle</option>';
+            for (const vehicle of vehicles) {
+              html += '<option value="' + vehicle.plateNum + '">' + vehicle.makeName + " " + vehicle.modelName + " " + vehicle.year + '</option>';
+            }
+            vehicleSelect.innerHTML = html;
+          }
         }
-
-        
-        document.querySelector(".activityButton").classList.add("disabled");
-        document.querySelector(".navActions").classList.add("disableEvent");
-
-  
-        const template = document.getElementById("serviceFormTemplate");
-        const clone = template?.content?.cloneNode(true);
-  
-        garageSection.replaceWith(clone);
+      }, error: function (ob, textStatus, error) {
+        alert(textStatus);
       }
-    }
+    });
   }
   else
   {

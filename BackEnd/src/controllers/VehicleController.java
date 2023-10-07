@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class VehicleController {
     public JsonArray getAllByCustomerId(Connection connection, int customerId) throws SQLException, ClassNotFoundException {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT a.plate_num, a.year, a.type, a.make_id, b.make_name, c.model_id, c.model_name FROM vehicle a ");
+        query.append("SELECT a.plate_num, a.year, a.type, a.make_id, b.make_name, a.model_id, c.model_name FROM vehicle a ");
         query.append("INNER JOIN vehicle_make b ON a.make_id = b.id ");
         query.append("INNER JOIN vehicle_model c ON a.model_id = c.id ");
         query.append("WHERE a.owner_id = ?");

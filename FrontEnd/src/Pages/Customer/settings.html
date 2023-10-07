@@ -154,37 +154,37 @@
           <div style="width: 50%">
             <h1>Change Phone Number</h1>
             <div class="settingSection">
-              <table>
-                <tr>
-                  <td>New Phone Number:</td>
-                  <td><input name="phone" placeholder="xxx-xxxxxxx" /></td>
-                  <td><h5>Send OTP</h5></td>
-                </tr>
-                <tr>
-                  <td>OTP:</td>
-                  <td>
-                    <input
-                      name="opt"
-                      placeholder="xxx-xxx"
-                      style="width: 40%"
-                    />
-                  </td>
-                  <td></td>
-                </tr>
-              </table>
-
-              <div class="settingAction">
-                <button type="button" onclick="setting()">
-                  <img
-                    src="images/cancel.svg"
-                    style="margin-right: 10px"
-                  />Cancel
-                </button>
-                <button type="submit" style="margin-right: 20px">
-                  <img src="images/save.svg" style="margin-right: 10px" />Save
-                  Number
-                </button>
-              </div>
+              <form onsubmit="phoneSettingSubmit(event, this)" style="width: 100%">
+                <table>
+                  <tr>
+                    <td>New Phone Number:</td>
+                    <!--                  <td><input name="phone" placeholder="xxx-xxxxxxx" /></td>-->
+                    <td><input id="phone" name="phone" /></td>
+                    <td><h5 onclick="sendOTP('CHANGE_PHONE')">Send OTP</h5></td>
+                  </tr>
+                  <tr>
+                    <td>OTP:</td>
+                    <td>
+                      <input
+                              name="opt"
+                              style="width: 40%"
+                      />
+                    </td>
+                    <td></td>
+                  </tr>
+                </table>
+                <div class="settingAction">
+                  <button type="button" onclick="setting()">
+                    <img
+                      src="images/cancel.svg"
+                      style="margin-right: 10px"
+                    />Cancel
+                  </button>
+                  <button type="submit" style="margin-right: 20px">
+                    <img src="images/save.svg" style="margin-right: 10px" />Save Number
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -282,4 +282,6 @@
   </body>
 
   <script src="js/main.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="jQuery/jquery-3.6.0.min.js"></script>
 </html>

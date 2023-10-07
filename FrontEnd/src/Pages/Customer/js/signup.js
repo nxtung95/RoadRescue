@@ -28,7 +28,7 @@ const submitRegistration = (e, formData) => {
     }
 
     $.ajax({
-      url: "http://localhost:8082/RoadRescue/otp",
+      url: API_URL + "/RoadRescue/otp",
       method: "POST",
       contentType: "application/json",
       data: JSON.stringify(data),
@@ -44,7 +44,7 @@ const submitRegistration = (e, formData) => {
             };
             // Create customer
             $.ajax({
-              url: "http://localhost:8082/RoadRescue/customer",
+              url: API_URL + "/RoadRescue/customer",
               method: "POST",
               contentType: "application/json",
               data: JSON.stringify(registrationData),

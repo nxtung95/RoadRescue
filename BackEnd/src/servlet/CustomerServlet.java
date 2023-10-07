@@ -195,12 +195,6 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        JsonReader reader = Json.createReader(req.getReader());
-        JsonObject jsonObject = reader.readObject();
-        String fName = jsonObject.getString("firstName");
-        String lName = jsonObject.getString("lastName");
-        String email = jsonObject.getString("email");
-
         Connection connection = null;
         PrintWriter writer = resp.getWriter();
         resp.setContentType("application/json");
@@ -208,22 +202,52 @@ public class CustomerServlet extends HttpServlet {
             connection = ds.getConnection();
             HttpSession session = req.getSession();
             int customerId = (int) session.getAttribute("customerId");
-            CustomerModel customerDTO = new CustomerModel(customerId, fName, lName, email);
-            boolean result = customerController.update(connection, customerDTO);
 
-            if (result) {
-                JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-                objectBuilder.add("status", 200);
-                objectBuilder.add("message", "Successfully Updated");
-                objectBuilder.add("data", "");
-                writer.print(objectBuilder.build());
-            } else {
-                JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-                resp.setStatus(HttpServletResponse.SC_OK);
-                objectBuilder.add("status", 400);
-                objectBuilder.add("message", "Update Failed");
-                objectBuilder.add("data", "");
-                writer.print(objectBuilder.build());
+            JsonReader reader = Json.createReader(req.getReader());
+            JsonObject jsonObject = reader.readObject();
+            String option = jsonObject.getString("option");
+            switch (option) {
+                case "UPDATE":
+                    String fName = jsonObject.getString("firstName");
+                    String lName = jsonObject.getString("lastName");
+                    String email = jsonObject.getString("email");
+                    CustomerModel customerDTO = new CustomerModel(customerId, fName, lName, email);
+                    boolean result = customerController.update(connection, customerDTO);
+                    if (result) {
+                        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                        objectBuilder.add("status", 200);
+                        objectBuilder.add("message", "Successfully Updated");
+                        objectBuilder.add("data", "");
+                        writer.print(objectBuilder.build());
+                    } else {
+                        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                        resp.setStatus(HttpServletResponse.SC_OK);
+                        objectBuilder.add("status", 400);
+                        objectBuilder.add("message", "Update Failed");
+                        objectBuilder.add("data", "");
+                        writer.print(objectBuilder.build());
+                    }
+                    break;
+                case "CHANGE_PHONE":
+                    String phoneNumber = jsonObject.getString("mobileNo");
+                    result = customerController.updatePhoneNumber(connection, phoneNumber, customerId);
+                    if (result) {
+                        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                        objectBuilder.add("status", 200);
+                        objectBuilder.add("message", "Successfully Updated");
+                        objectBuilder.add("data", "");
+                        writer.print(objectBuilder.build());
+                    } else {
+                        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                        resp.setStatus(HttpServletResponse.SC_OK);
+                        objectBuilder.add("status", 400);
+                        objectBuilder.add("message", "Update Failed");
+                        objectBuilder.add("data", "");
+                        writer.print(objectBuilder.build());
+                    }
+                    break;
+                default:
+                    break;
             }
         } catch (SQLException throwables) {
             JsonObjectBuilder objectBuilder = Json.createObjectBuilder();

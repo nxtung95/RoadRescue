@@ -1,5 +1,6 @@
 package servlet;
 
+import controllers.CustomerController;
 import controllers.OtpController;
 import models.OtpModel;
 import utils.CommonUtils;
@@ -29,6 +30,8 @@ public class OTPServlet extends HttpServlet {
 
     private OtpController otpController = new OtpController();
 
+    private CustomerController customerController = new CustomerController();
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         PrintWriter writer = resp.getWriter();
@@ -41,7 +44,45 @@ public class OTPServlet extends HttpServlet {
             connection = ds.getConnection();
             switch (option) {
                 case "SEND_OTP":
+                    String from = jsonObject.getString("from");
                     String mobileNo = jsonObject.getString("mobileNo");
+                    if ("SIGN_UP".equalsIgnoreCase(from)) {
+                        boolean checkExistMobileNo = customerController.checkExistMobileNo(connection, mobileNo);
+                        if (checkExistMobileNo) {
+                            // Exist mobile no
+                            JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                            resp.setStatus(HttpServletResponse.SC_OK);
+                            objectBuilder.add("status",400);
+                            objectBuilder.add("message","Error");
+                            objectBuilder.add("data", "This phone number have existed!");
+                            writer.print(objectBuilder.build());
+                            return;
+                        }
+                    } else if ("SIGN_IN".equalsIgnoreCase(from)) {
+                        JsonObject customer = customerController.getCustomerByMobileNo(connection, mobileNo);
+                        if (customer == null) {
+                            // Not exist customer in the system
+                            JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                            resp.setStatus(HttpServletResponse.SC_OK);
+                            objectBuilder.add("status",400);
+                            objectBuilder.add("message","Error");
+                            objectBuilder.add("data", "This customer is not registered!");
+                            writer.print(objectBuilder.build());
+                            return;
+                        }
+                    } else if ("CHANGE_PHONE".equalsIgnoreCase(from)) {
+                        boolean checkExistMobileNo = customerController.checkExistMobileNo(connection, mobileNo);
+                        if (checkExistMobileNo) {
+                            // Exist customer in the system
+                            JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                            resp.setStatus(HttpServletResponse.SC_OK);
+                            objectBuilder.add("status",400);
+                            objectBuilder.add("message","Error");
+                            objectBuilder.add("data", "Already have used this phone number!");
+                            writer.print(objectBuilder.build());
+                            return;
+                        }
+                    }
                     String otp = CommonUtils.generateRandomNum(6);
                     System.out.println("OTP: " + otp);
                     Timestamp now = Timestamp.valueOf(LocalDateTime.now());

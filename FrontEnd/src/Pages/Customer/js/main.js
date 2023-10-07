@@ -1,3 +1,5 @@
+const API_URL = "http://localhost:8082";
+
 const toggleMenu = () => {
   var loader = document.getElementById("menu");
   loader.classList.toggle("hide");
@@ -78,7 +80,7 @@ const serviceForm = () => {
   if(url.includes("index.html"))
   {
     $.ajax({
-      url: "http://localhost:8082/RoadRescue/vehicle?option=GETALL",
+      url: API_URL + "/RoadRescue/vehicle?option=GETALL",
       method: "GET",
       contentType: "application/json",
       beforeSend: function(request) {
@@ -352,37 +354,6 @@ window.addEventListener("click", function (e) {
   }
 });
 
-// ------------------- Setting -------------------
-
-const setting = () => {
-  if ("content" in document.createElement("template")) {
-    const settingContainer =
-      document.getElementById("settingContainer") ||
-      document.getElementById("phoneMain") ||
-      document.getElementById("paymentMain");
-    if (!!settingContainer) {
-      const template = document.getElementById("settingMainTemplate");
-      if (!!template) {
-        const clone = template.content.cloneNode(true);
-        settingContainer.replaceWith(clone);
-      }
-    }
-  }
-};
-
-const phoneSetting = () => {
-  if ("content" in document.createElement("template")) {
-    const phoneContainer = document.getElementById("settingMain");
-    if (!!phoneContainer) {
-      const template = document.getElementById("phoneTemplate");
-      if (!!template) {
-        const clone = template.content.cloneNode(true);
-        phoneContainer.replaceWith(clone);
-      }
-    }
-  }
-};
-
 const managePayment = () => {
   if ("content" in document.createElement("template")) {
     const paymentContainer =
@@ -424,6 +395,12 @@ const addCard = (e) => {
 // -------------------- User ---------------------
 
 const logout = (e, formData) => {
+  if (localStorage.getItem("token")) {
+    localStorage.removeItem("token");
+  }
+  if (localStorage.getItem("customer")) {
+    localStorage.removeItem("customer");
+  }
   window.location.href = "signin.html";
 };
 
@@ -448,7 +425,7 @@ const notificationAlert = () => {
 };
 
 // -------------------- OTP ----------------------
-const sendOTP = () => {
+const sendOTP = (from) => {
   const mobileNo = $('#phone').val();
   if (!mobileNo) {
     alert("Please enter your phone number!");
@@ -456,11 +433,12 @@ const sendOTP = () => {
   }
   var data = {
     mobileNo: mobileNo,
-    option: "SEND_OTP"
+    option: "SEND_OTP",
+    from: from
   }
 
   $.ajax({
-    url: "http://localhost:8082/RoadRescue/otp",
+    url: API_URL + "/RoadRescue/otp",
     method: "POST",
     contentType: "application/json",
     data: JSON.stringify(data),

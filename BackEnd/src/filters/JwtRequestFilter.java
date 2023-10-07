@@ -85,8 +85,18 @@ public class JwtRequestFilter implements Filter {
             try {
                 connection = ds.getConnection();
                 JsonObject validCus = customerController.getCustomerById(connection, customer.getInt("customerId"));
-                if (validCus.getString("mobileNo").equals(customer.getString("mobileNo"))) {
+                if (validCus != null) {
                     session.setAttribute("customerId", validCus.getInt("customerId"));
+                } else {
+                    PrintWriter writer = response.getWriter();
+                    response.setContentType("application/json");
+                    servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    JsonObjectBuilder resp = Json.createObjectBuilder();
+                    resp.add("status",401);
+                    resp.add("message","Unauthorized");
+                    resp.add("data", "JWT token failed");
+                    writer.print(resp.build());
+                    return;
                 }
             } catch (SQLException e) {
                 System.out.println(e.getLocalizedMessage());

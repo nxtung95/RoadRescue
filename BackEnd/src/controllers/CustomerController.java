@@ -41,6 +41,10 @@ public class CustomerController {
         return CrudUtil.executeUpdate(connection,"UPDATE Customer SET f_name=?,l_name=?,email=? WHERE customer_id=?",customer.getfName(),customer.getlName(),customer.getEmail(), customer.getCustomerId());
     }
 
+    public boolean updatePhoneNumber(Connection connection, String newPhoneNumber, int customerId) throws SQLException, ClassNotFoundException {
+        return CrudUtil.executeUpdate(connection,"UPDATE Customer SET contact_num=? WHERE customer_id=?",newPhoneNumber, customerId);
+    }
+
     public boolean checkExistMobileNo(Connection connection, String mobileNo) throws SQLException, ClassNotFoundException {
         ResultSet rst = CrudUtil.executeQuery(connection, "SELECT * FROM customer WHERE contact_num=?", mobileNo);
         return rst.next();

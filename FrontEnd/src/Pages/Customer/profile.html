@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
   <head>
     <meta charset="UTF-8" />
 
@@ -178,9 +178,10 @@
 
                   <template id="firstNameTemplate">
                     <td id="firstName">
-                      <input name="firstName" value="" />
+                      <input id="editFirstName" name="firstName" value="" />
                     </td>
                   </template>
+                  <input id="profileFirstName" name="firstName" type="hidden" value="" />
 
                   <td style="border: none; padding: 0 0 0 5px">
                     <img
@@ -197,9 +198,10 @@
 
                   <template id="lastNameTemplate">
                     <td id="lastName">
-                      <input name="lastName" value="" />
+                      <input id="editLastName" name="lastName" value="" />
                     </td>
                   </template>
+                  <input id="profileLastName" name="lastName" type="hidden" value="" />
 
                   <td style="border: none; padding: 0 0 0 5px">
                     <img
@@ -223,11 +225,13 @@
                   <template id="emailTemplate">
                     <td id="email">
                       <input
+                        id="editEmail"
                         name="email"
                         value=""
                       />
                     </td>
                   </template>
+                  <input id="profileEmail" name="email" type="hidden" value="" />
 
                   <td style="border: none; padding: 0 0 0 5px">
                     <img
@@ -276,6 +280,5 @@
 
   <script src="js/main.js"></script>
   <script src="js/profile.js"></script>
-  <script src="../../assets/js/bootstrap.bundle.min.js"></script>
-  <script src="../../assets/jQuery/jquery-3.6.0.min.js"></script>
+  <script src="jQuery/jquery-3.6.0.min.js"></script>
 </html>

@@ -2,7 +2,7 @@
 
 const profile = () => {
   $.ajax({
-    url: "http://localhost:8082/RoadRescue/customer?option=VIEW",
+    url: API_URL + "/RoadRescue/customer?option=VIEW",
     method: "GET",
     contentType: "application/json",
     beforeSend: function(request) {
@@ -36,7 +36,7 @@ const profile = () => {
 
 const editProfile = () => {
   $.ajax({
-    url: "http://localhost:8082/RoadRescue/customer?option=VIEW",
+    url: API_URL + "/RoadRescue/customer?option=VIEW",
     method: "GET",
     contentType: "application/json",
     beforeSend: function(request) {
@@ -59,6 +59,10 @@ const editProfile = () => {
         const elementMobileNo = res.data.mobileNo + '<img style="float: right" src="images/check.svg" />';
         $('#profileMobileNo').html(elementMobileNo);
         $('#email').html(res.data.email);
+
+        $('#profileFirstName').val(res.data.firstName);
+        $('#profileLastName').val(res.data.lastName);
+        $('#profileEmail').val(res.data.email);
       }
     }, error: function (ob, textStatus, error) {
       alert(textStatus);
@@ -77,6 +81,8 @@ const editFirstName = () => {
       }
     }
   }
+  $('#editFirstName').val($('#profileFirstName').val());
+  $('#profileFirstName').remove();
 };
 
 const editLastName = () => {
@@ -90,6 +96,8 @@ const editLastName = () => {
       }
     }
   }
+  $('#editLastName').val($('#profileLastName').val());
+  $('#profileLastName').remove();
 };
 
 const editEmail = () => {
@@ -103,6 +111,8 @@ const editEmail = () => {
       }
     }
   }
+  $('#editEmail').val($('#profileEmail').val());
+  $('#profileEmail').remove();
 };
 
 const profileSubmit = (e, formData) => {
@@ -122,11 +132,12 @@ const profileSubmit = (e, formData) => {
   const data = {
     firstName: firstName,
     lastName: lastName,
-    email: email
+    email: email,
+    option: "UPDATE"
   }
 
   $.ajax({
-    url: "http://localhost:8082/RoadRescue/customer",
+    url: API_URL + "/RoadRescue/customer",
     method: "PUT",
     contentType: "application/json",
     data: JSON.stringify(data),

@@ -1,7 +1,7 @@
 // ----------------------- Vehicle ----------------------
 const vehicle = () => {
   $.ajax({
-    url: "http://localhost:8082/RoadRescue/vehicle?option=GETALL",
+    url: API_URL + "/RoadRescue/vehicle?option=GETALL",
     method: "GET",
     contentType: "application/json",
     beforeSend: function(request) {
@@ -59,7 +59,7 @@ const showEditVehicle = (event) => {
   const plateNum = event.target.getAttribute("data-plateNum");
   if (plateNum) {
     $.ajax({
-      url: "http://localhost:8082/RoadRescue/vehicle?option=VIEW&plateNum=" + plateNum,
+      url: API_URL + "/RoadRescue/vehicle?option=VIEW&plateNum=" + plateNum,
       method: "GET",
       contentType: "application/json",
       beforeSend: function(request) {
@@ -80,7 +80,7 @@ const showEditVehicle = (event) => {
 
           const vehicle = res.data;
           $.ajax({
-            url: "http://localhost:8082/RoadRescue/vehicle/make",
+            url: API_URL + "/RoadRescue/vehicle/make",
             method: "GET",
             contentType: "application/json",
             beforeSend: function(request) {
@@ -107,7 +107,7 @@ const showEditVehicle = (event) => {
           });
 
           $.ajax({
-            url: "http://localhost:8082/RoadRescue/vehicle/model?makeId=" + vehicle.makeId,
+            url: API_URL + "/RoadRescue/vehicle/model?makeId=" + vehicle.makeId,
             method: "GET",
             contentType: "application/json",
             beforeSend: function(request) {
@@ -167,7 +167,7 @@ const deleleVehicle = (e) => {
     const res = confirm("Do you want to delete this vehicle?");
     if (res) {
       $.ajax({
-        url: "http://localhost:8082/RoadRescue/vehicle?plateNum=" + plateNum,
+        url: API_URL + "/RoadRescue/vehicle?plateNum=" + plateNum,
         method: "DELETE",
         contentType: "application/json",
         beforeSend: function(request) {
@@ -188,7 +188,7 @@ const deleleVehicle = (e) => {
 
 const addVehicle = () => {
   $.ajax({
-    url: "http://localhost:8082/RoadRescue/vehicle/make",
+    url: API_URL + "/RoadRescue/vehicle/make",
     method: "GET",
     contentType: "application/json",
     beforeSend: function(request) {
@@ -234,7 +234,7 @@ const selectMake = () => {
   }
 
   $.ajax({
-    url: "http://localhost:8082/RoadRescue/vehicle/model?makeId=" + makeId,
+    url: API_URL + "/RoadRescue/vehicle/model?makeId=" + makeId,
     method: "GET",
     contentType: "application/json",
     beforeSend: function(request) {
@@ -294,7 +294,7 @@ const vehicleSubmit = (e, formData) => {
   }
 
   $.ajax({
-    url: "http://localhost:8082/RoadRescue/vehicle",
+    url: API_URL + "/RoadRescue/vehicle",
     method: "POST",
     contentType: "application/json",
     data: JSON.stringify(data),
@@ -346,7 +346,7 @@ const editVehicleSubmit = (e, formData) => {
   }
 
   $.ajax({
-    url: "http://localhost:8082/RoadRescue/vehicle",
+    url: API_URL + "/RoadRescue/vehicle",
     method: "PUT",
     contentType: "application/json",
     data: JSON.stringify(data),

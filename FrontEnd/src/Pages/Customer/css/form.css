@@ -982,7 +982,7 @@ main {
   }
 }
 
-.settingSection > table {
+.settingSection > form > table {
   padding: 20px;
   width: 100%;
   text-align: start;
@@ -990,7 +990,7 @@ main {
   -webkit-border-vertical-spacing: 15px;
 }
 
-.settingSection > table td {
+.settingSection > form > table td {
   font-size: var(--h3);
   font-weight: 700;
   text-align: left;
@@ -998,7 +998,7 @@ main {
   padding-bottom: 10px;
 }
 
-.settingSection > table td > input {
+.settingSection > form > table td > input {
   width: 80%;
   padding: 15px 5%;
   border: none;
@@ -1010,7 +1010,7 @@ main {
   background: white;
 }
 
-.settingSection > table td > h5 {
+.settingSection > form > table td > h5 {
   margin: 0 0 0 10px;
   cursor: pointer;
 }

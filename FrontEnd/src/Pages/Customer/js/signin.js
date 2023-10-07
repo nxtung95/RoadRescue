@@ -20,7 +20,7 @@ const submitLogin = (e, formData) => {
     }
 
     $.ajax({
-      url: "http://localhost:8082/RoadRescue/otp",
+      url: API_URL + "/RoadRescue/otp",
       method: "POST",
       contentType: "application/json",
       data: JSON.stringify(data),
@@ -34,7 +34,7 @@ const submitLogin = (e, formData) => {
             };
             // Login and get token
             $.ajax({
-              url: "http://localhost:8082/RoadRescue/customer",
+              url: API_URL + "/RoadRescue/customer",
               method: "POST",
               contentType: "application/json",
               data: JSON.stringify(loginData),
